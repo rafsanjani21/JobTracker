@@ -1,62 +1,114 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
-import JobCard from './JobCard'
+import { useEffect, useState, useMemo } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import JobCard from "./JobCard";
+import Link from "next/link";
 
 export default function JobList({ user }: { user: any }) {
-  const [applications, setApplications] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("Semua");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
+  // Ambil data dari Supabase
   useEffect(() => {
-    if (!user) return
+    if (!user) return;
     const fetchApplications = async () => {
       const { data, error } = await supabase
-        .from('applications')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("applications")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      if (!error) setApplications(data || [])
-      setLoading(false)
+      if (!error) setApplications(data || []);
+      setLoading(false);
+    };
+    fetchApplications();
+  }, [user]);
+
+  // Hapus data
+  const handleDelete = async (id: number) => {
+    if (!confirm("Yakin ingin menghapus lamaran ini?")) return;
+    const { error } = await supabase.from("applications").delete().eq("id", id);
+    if (error) alert(error.message);
+    else setApplications((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  // Filter dan pencarian (gunakan useMemo agar efisien)
+  const filteredApplications = useMemo(() => {
+    let filtered = applications;
+
+    if (filterStatus !== "Semua") {
+      filtered = filtered.filter(
+        (app) => app.status?.toLowerCase() === filterStatus.toLowerCase()
+      );
     }
 
-    fetchApplications()
-  }, [user])
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (app) =>
+          app.company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.position?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Yakin ingin menghapus lamaran ini?')) return
-    const { error } = await supabase.from('applications').delete().eq('id', id)
-    if (error) alert(error.message)
-    else setApplications((prev) => prev.filter((a) => a.id !== id))
-  }
+    return filtered;
+  }, [applications, filterStatus, searchTerm]);
 
-  // 🔹 Hitung total halaman
-  const totalPages = Math.ceil(applications.length / itemsPerPage)
+  // Pagination
+  const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredApplications.slice(indexOfFirstItem, indexOfLastItem);
 
-  // 🔹 Data yang akan ditampilkan pada halaman saat ini
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = applications.slice(indexOfFirstItem, indexOfLastItem)
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
 
-  // 🔹 Fungsi untuk pindah halaman
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1)
-  }
-
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1)
-  }
+  // Reset ke halaman 1 setiap kali filter/pencarian berubah
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus]);
 
   return (
-    <section>
-      <h2 className="text-4xl font-extrabold my-6 text-center">Daftar Lamaran</h2>
+    <section id="job-list" className="scroll-mt-24">
+      <h2 className="text-4xl font-extrabold my-6 text-center text-blue-900">
+        Daftar Lamaran
+      </h2>
 
+      {/* Search & Filter */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 mx-6">
+        <input
+          type="text"
+          placeholder="Cari berdasarkan perusahaan atau posisi..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border shadow-lg border-gray-200 rounded-md px-4 py-2 w-full sm:w-1/4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="border shadow-lg border-gray-200 rounded-md px-4 py-2 w-full sm:w-1/4 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        >
+          <option value="Semua">Semua Status</option>
+          <option value="Dikirim">Dikirim</option>
+          <option value="Interview">Interview</option>
+          <option value="Pending">Pending</option>
+          <option value="Diterima">Diterima</option>
+          <option value="Ditolak">Ditolak</option>
+        </select>
+      </div>
+
+      {/* Data Section */}
       {loading ? (
         <p>Memuat...</p>
-      ) : applications.length === 0 ? (
-        <p className="text-gray-500 italic text-center">Tidak ada data.</p>
+      ) : filteredApplications.length === 0 ? (
+        <p className="text-gray-500 italic text-center">
+          Tidak ada data yang cocok.
+        </p>
       ) : (
         <>
           <ul className="space-y-3">
@@ -65,38 +117,31 @@ export default function JobList({ user }: { user: any }) {
             ))}
           </ul>
 
-          {/* 🔹 Pagination Controls */}
-          <div className="flex justify-center items-center mt-6 gap-4">
-            <button
-              onClick={handlePrev}
-              disabled={currentPage === 1}
-              className={`px-4 py-2 rounded ${
-                currentPage === 1
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              Sebelumnya
-            </button>
+          <Link
+            href="/add-job"
+            className="bg-yellow-400 text-blue-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-yellow-300 transition block w-max mx-auto mt-6"
+          >
+            + Tambah Lamaran Baru
+          </Link>
 
-            <span className="text-gray-700">
-              Halaman <b>{currentPage}</b> dari <b>{totalPages}</b>
-            </span>
-
-            <button
-              onClick={handleNext}
-              disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded ${
-                currentPage === totalPages
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              Berikutnya
-            </button>
+          {/* Pagination */}
+          <div className="flex justify-center items-center mt-6 gap-2 flex-wrap ">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`px-4 py-2 rounded border cursor-pointer ${
+                  currentPage === page
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-blue-600 border-gray-300 hover:bg-blue-100"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
           </div>
         </>
       )}
     </section>
-  )
+  );
 }
