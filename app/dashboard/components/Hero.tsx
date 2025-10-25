@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function Hero() {
   return (
-    <section id="hero" className="relative text-center py-16 bg-linear-to-r from-blue-700 to-blue-500 text-white h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative text-center py-16 bg-[url('/heroo.png')] bg-cover bg-center text-white h-screen flex items-center justify-center overflow-hidden">
       <div className="flex flex-col items-center relative z-10">
         <img src="/logoo.png" alt="Hero Image" className="h-50 mb-6" />
         <h1 className="text-4xl font-extrabold mb-4">
