@@ -25,7 +25,7 @@ export default function RegisterForm({
 }) {
   return (
     <div className="p-8 max-w-md w-full rounded-xl">
-      <h1 className="text-3xl font-bold text-center text-white">Job Tracker</h1>
+      <h1 className="text-3xl font-bold text-center text-white">JobTracker</h1>
       <h1 className="text-2xl font-bold mb-6 text-center text-white">Daftar Akun</h1>
 
       <form onSubmit={handleRegister} className="space-y-4">

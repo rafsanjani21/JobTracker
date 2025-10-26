@@ -27,7 +27,7 @@ export function useAddJob() {
           title: "Belum login",
           text: "Silakan login terlebih dahulu.",
           confirmButtonText: "Login",
-          confirmButtonColor: "#2563eb", // biru Tailwind
+          confirmButtonColor: "#2563eb",
         }).then(() => {
           router.push("/login")
         })
