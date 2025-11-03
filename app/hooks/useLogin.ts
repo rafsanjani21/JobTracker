@@ -43,6 +43,29 @@ export function useLogin() {
     }
   };
 
+  // Lupa Password
+  const handleForgotPassword = async () => {
+  if (!email) {
+    setErrorMsg("Masukkan email terlebih dahulu.");
+    return;
+  }
+
+  setLoading(true);
+  setErrorMsg("");
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  });
+
+  setLoading(false);
+
+  if (error) {
+    setErrorMsg("Gagal mengirim email reset: " + error.message);
+  } else {
+    alert("Link reset password telah dikirim ke email kamu!");
+  }
+};
+
   return {
     email,
     setEmail,
@@ -52,5 +75,7 @@ export function useLogin() {
     loading,
     handleLogin,
     handleGoogleLogin,
+    handleForgotPassword,
   };
+
 }

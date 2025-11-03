@@ -13,6 +13,7 @@ export default function LoginPage() {
     loading,
     handleLogin,
     handleGoogleLogin,
+    handleForgotPassword,
   } = useLogin();
 
   return (
@@ -27,6 +28,7 @@ export default function LoginPage() {
           loading={loading}
           handleLogin={handleLogin}
           handleGoogleLogin={handleGoogleLogin}
+          handleForgotPassword={handleForgotPassword}
         />
       </div>
     </main>
