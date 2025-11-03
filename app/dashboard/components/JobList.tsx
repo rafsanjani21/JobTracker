@@ -21,7 +21,7 @@ export default function JobList({ user }: { user: any }) {
 
   return (
     <section id="job-list" className="scroll-mt-24">
-      <h2 className="text-4xl font-extrabold my-6 text-center text-blue-900">
+      <h2 className="md:text-4xl text-2xl font-extrabold my-6 text-center text-blue-900">
         Daftar Lamaran
       </h2>
 
@@ -66,7 +66,7 @@ export default function JobList({ user }: { user: any }) {
 
           <Link
             href="/add-job"
-            className="bg-yellow-400 text-blue-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-yellow-300 transition block w-max mx-auto mt-6"
+            className="bg-yellow-400 text-blue-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-yellow-300 transition block w-max mx-auto mt-6 md:text-lg text-sm"
           >
             + Tambah Lamaran Baru
           </Link>
@@ -77,7 +77,7 @@ export default function JobList({ user }: { user: any }) {
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`px-4 py-2 rounded border cursor-pointer ${
+                className={`px-4 py-2 rounded border cursor-pointer md:text-lg text-sm ${
                   currentPage === page
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-blue-600 border-gray-300 hover:bg-blue-100"

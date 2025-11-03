@@ -2,13 +2,13 @@ export default function Footer() {
   return (
     <footer className="bg-linear-60 bg-[url('/heroo.png')] bg-cover bg-center text-primary-content p-10 flex flex-col items-center text-center space-y-6 border-2 border-gray-200 w-full mt-6 shadow-lg">
       <aside>
-        <img src="/logoo.png" alt="Footer Logo" className="w-32 mb-4 mx-auto" />
-        <p className="font-bold">
+        <img src="/logoo.png" alt="Footer Logo" className="md:w-32 w-20 mb-4 mx-auto" />
+        <p className="font-bold md:text-lg text-sm">
           JobTracker.
           <br />
           Lacak dan kelola lamaran pekerjaan Anda dengan mudah
         </p>
-        <p>Copyright © {new Date().getFullYear()} - All rights reserved</p>
+        <p className="md:text-md text-xs">Copyright © {new Date().getFullYear()} - All rights reserved</p>
       </aside>
 
       <nav>
