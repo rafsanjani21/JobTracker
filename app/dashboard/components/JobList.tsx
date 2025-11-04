@@ -43,7 +43,7 @@ export default function JobList({ user }: { user: any }) {
           <option value="Semua">Semua Status</option>
           <option value="Dikirim">Dikirim</option>
           <option value="Interview">Interview</option>
-          <option value="Pending">Pending</option>
+          <option value="Test">Test</option>
           <option value="Diterima">Diterima</option>
           <option value="Ditolak">Ditolak</option>
         </select>

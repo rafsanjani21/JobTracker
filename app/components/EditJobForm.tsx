@@ -61,7 +61,7 @@ export default function EditJobForm({
           <option value="Interview">Interview</option>
           <option value="Diterima">Diterima</option>
           <option value="Ditolak">Ditolak</option>
-          <option value="Pending">Pending</option>
+          <option value="Test">Test</option>
         </select>
       </div>
 
