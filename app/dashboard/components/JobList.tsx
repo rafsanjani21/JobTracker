@@ -26,7 +26,7 @@ export default function JobList({ user }: { user: any }) {
       </h2>
 
       {/* Search & Filter */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 mx-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 mx-6">
         <input
           type="text"
           placeholder="Cari berdasarkan perusahaan atau posisi..."
@@ -49,9 +49,16 @@ export default function JobList({ user }: { user: any }) {
         </select>
       </div>
 
+      {/* Menampilkan Total Lamaran */}
+      {!loading && (
+        <div className="mx-6 mb-4 text-gray-600 text-sm md:text-base font-medium">
+          Total lamaran: <span className="text-blue-600 font-bold">{filteredApplications.length}</span>
+        </div>
+      )}
+
       {/* Data Section */}
       {loading ? (
-        <p>Memuat...</p>
+        <p className="text-center">Memuat...</p>
       ) : filteredApplications.length === 0 ? (
         <p className="text-gray-500 italic text-center">
           Tidak ada data yang cocok.
