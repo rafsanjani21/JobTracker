@@ -4,33 +4,23 @@ import { useLogin } from "../hooks/useLogin";
 import LoginForm from "../components/LoginForm";
 
 export default function LoginPage() {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    errorMsg,
-    loading,
-    handleLogin,
-    handleGoogleLogin,
-    handleForgotPassword,
-  } = useLogin();
+  const { errorMsg, loading, handleGoogleLogin } = useLogin();
 
   return (
-    <main className="min-h-screen justify-center items-center lg:justify-start flex bg-[url('/login.jpg')] bg-cover bg-center">
-      <div className="w-full h-screen rounded-none md:w-3/4 md:h-3/4 md:rounded-2xl lg:rounded-none lg:w-1/2 lg:h-screen flex items-center justify-center bg-black/20 backdrop-blur-md p-8">
+    <main className="relative min-h-screen w-full flex items-center justify-center bg-[url('/login.jpg')] bg-cover bg-center bg-no-repeat">
+      
+      {/* OVERLAY PREMIUM: Warna gelap merata dengan efek blur halus pada background */}
+      <div className="absolute inset-0 bg-[#050505]/50 backdrop-blur-[4px] z-0"></div>
+
+      {/* CONTAINER FORM: Terpusat sempurna tanpa elemen yang mendistraksi */}
+      <div className="relative z-10 flex w-full justify-center px-4">
         <LoginForm
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
           errorMsg={errorMsg}
           loading={loading}
-          handleLogin={handleLogin}
           handleGoogleLogin={handleGoogleLogin}
-          handleForgotPassword={handleForgotPassword}
         />
       </div>
+
     </main>
   );
 }
