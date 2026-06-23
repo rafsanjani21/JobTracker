@@ -15,15 +15,33 @@ interface JobCardProps {
 }
 
 export default function JobCard({ app, onDelete }: JobCardProps) {
+  // Fungsi untuk menentukan warna berdasarkan status
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Dikirim':
+        return 'text-blue-500'
+      case 'Interview':
+        return 'text-yellow-500'
+      case 'Diterima':
+        return 'text-green-500'
+      case 'Ditolak':
+        return 'text-red-500'
+      case 'Test':
+        return 'text-indigo-500'
+      default:
+        return 'text-gray-800' // Warna default jika status tidak dikenali
+    }
+  }
+
   return (
-    <li className="border-2 border-gray-200 p-4 rounded shadow-lg flex  justify-between items-center mx-6">
+    <li className="border-2 border-gray-200 p-4 rounded shadow-lg flex justify-between items-center mx-6">
       <div>
         <p className="font-bold">{app.company_name}</p>
         <p className="text-sm text-gray-600">
           {app.position} — {app.platform}
         </p>
         <p className="text-sm mt-1">
-          Status: <b>{app.status}</b>
+          Status: <b className={getStatusColor(app.status)}>{app.status}</b>
         </p>
         <p className="text-sm mt-1">
           Tanggal Lamar: <b>{app.applied_date}</b>
