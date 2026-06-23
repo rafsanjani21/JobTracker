@@ -61,11 +61,11 @@ export default function AddJobForm({
           onChange={handleChange}
           className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
         >
-          <option value="Dikirim">Dikirim</option>
-          <option value="Interview">Interview</option>
-          <option value="Diterima">Diterima</option>
-          <option value="Ditolak">Ditolak</option>
-          <option value="Test">Test</option>
+          <option className="text-blue-500" value="Dikirim">Dikirim</option>
+          <option className="text-yellow-500" value="Interview">Interview</option>
+          <option className="text-green-500" value="Diterima">Diterima</option>
+          <option className="text-red-500" value="Ditolak">Ditolak</option>
+          <option className="text-indigo-500" value="Test">Test</option>
         </select>
       </div>
 
